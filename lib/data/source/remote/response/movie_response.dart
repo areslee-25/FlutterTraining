@@ -25,16 +25,16 @@ class MovieResponse {
   });
 
   factory MovieResponse.fromJson(Map<String, dynamic> json) => MovieResponse(
-        id: (jsonDecode(json, "id") as num).toInt(),
+        id: jsonDecode<int>(json, "id"),
         title: jsonDecode(json, 'title', alternativeKey: 'original_name'),
         posterUrl: KeyPrams.imgPath + jsonDecode(json, "poster_path"),
         backdropUrl: KeyPrams.imgPath + jsonDecode(json, 'backdrop_path'),
-        voteAverage: (jsonDecode(json, 'vote_average') as num).toString(),
+        voteAverage: jsonDecode<double>(json, 'vote_average').toString(),
         overview: jsonDecode(json, "overview"),
         releaseDate:
             jsonDecode(json, 'release_date', alternativeKey: 'first_air_date'),
-        voteCount: jsonDecode(json, "vote_count"),
-        popularity: (jsonDecode(json, "vote_count") as num).toDouble(),
+        voteCount: jsonDecode<int>(json, "vote_count"),
+        popularity: jsonDecode<double>(json, "popularity"),
       );
 
   Movie toMovie() {
