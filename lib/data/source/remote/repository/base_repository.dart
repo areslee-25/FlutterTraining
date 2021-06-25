@@ -34,19 +34,38 @@ Uri createUri(String path, [Map<String, String>? queryParameters]) {
   return Uri.https(baseUrl, path, query);
 }
 
-dynamic jsonDecode(Map<String, dynamic> json, String key,
-    {String? alternativeKey}) {
+dynamic jsonDecode<T>(
+  Map<String, dynamic> json,
+  String key, {
+  String? alternativeKey,
+}) {
   try {
     dynamic data = json[key];
     if (data == null) {
       if (alternativeKey != null) {
         return jsonDecode(json, alternativeKey);
       }
-      print('Parse Json NULL key = $key');
-      return '';
+       print('Json Key = $key is Null');
     }
-    return data;
+    return formatJsonData<T>(data);
   } catch (e) {
-    print('Parse Error: $e, Key = $key');
+    print('Parse Json Error: $e, Key: $key');
   }
+}
+
+dynamic formatJsonData<T>(dynamic data) {
+  dynamic result = data;
+
+  switch (T) {
+    case int:
+      result = data != null ? (data as num).toInt() : 0;
+      break;
+    case double:
+      result = data != null ? (data as num).toDouble() : 0.0;
+      break;
+    default:
+      result = data != null ? data : "";
+      break;
+  }
+  return result as T;
 }
