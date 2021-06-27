@@ -40,7 +40,7 @@ class MovieBloc extends BaseBloc {
     final streams = [loadDataStream];
 
     return MovieBloc._(
-      disposeBag: DisposeBag([controllers, streams]),
+      disposeBag: DisposeBag([...controllers, ...streams]),
       dataList: loadDataStream,
     );
   }

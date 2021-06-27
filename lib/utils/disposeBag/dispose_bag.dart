@@ -6,13 +6,13 @@ class DisposeBag implements DisposeBagBase {
   Set<Object>? _resources;
 
   DisposeBag([Iterable<Object> disposables = const <Object>[]]) {
-    _resources = Set.of(disposables.convertNotNull());
+    disposables = disposables.convertToSet();
+    //   _guardTypeMany(disposables);
+    _resources = Set.of(disposables);
   }
 
   @override
-  Future<bool> add(Object disposable) => _addImpl(disposable);
-
-  Future<bool> _addImpl(Object disposable) async {
+  Future<bool> add(Object disposable) async {
     _guardType(disposable);
 
     final resources = _resources;
@@ -24,9 +24,8 @@ class DisposeBag implements DisposeBagBase {
   }
 
   @override
-  Future<void> addAll(Iterable<Object> disposables) => _addAllImpl(disposables);
-
-  Future<void> _addAllImpl(Iterable<Object> disposables) async {
+  Future<void> addAll(Iterable<Object> disposables) async {
+    disposables = disposables.convertToSet();
     _guardTypeMany(disposables);
 
     final resources = _resources;
@@ -38,16 +37,33 @@ class DisposeBag implements DisposeBagBase {
   }
 
   @override
-  Future<void> clear() => _clearImpl();
-
-  Future<void> _clearImpl() async {
+  Future<bool> remove(Object disposable) async {
+    _guardType(disposable);
     final resources = _resources!;
+    final removed = resources.remove(disposable);
+    if (removed) {
+      await _disposeOne(disposable);
+    }
+    return removed;
+  }
+
+  @override
+  Future<void> clear() async {
+    final resources = _resources;
+
+    bool isDisposed = resources == null;
+    if (isDisposed) {
+      print('Disposed: isDisposed');
+      return;
+    }
+
     try {
       if (resources.isNotEmpty) {
         await _disposeByType<StreamSubscription>(resources);
         await _disposeByType<Sink>(resources);
       }
       resources.clear();
+      _resources = null;
       print('Disposed Succeeded');
     } catch (error) {
       print('Disposed Failure: $error');
@@ -57,12 +73,15 @@ class DisposeBag implements DisposeBagBase {
     }
   }
 
-  Future<void>? _disposeByType<T extends Object>(Iterable<Object> resources) {
-    return _wait(resources
-        .whereType<T>()
-        .map(_disposeOne)
-        .whereNotNull()
-        .toList(growable: false));
+  Future<dynamic>? _disposeByType<T extends Object>(
+      Iterable<Object> resources) {
+    return _wait(
+      resources
+          .whereType<T>()
+          .map(_disposeOne)
+          .whereNotNull()
+          .toList(growable: false),
+    );
   }
 
   Future<void>? _wait(List<Future<void>> futures) {
@@ -77,13 +96,18 @@ class DisposeBag implements DisposeBagBase {
 
   /// Cancel [StreamSubscription] or close [Sink]
   Future<void>? _disposeOne(Object disposable) {
+    final type = disposable.runtimeType;
+
     if (disposable is StreamSubscription) {
+      print('$type, dispose -> StreamSubscription');
       return disposable.cancel();
     }
     if (disposable is StreamSink) {
+      print('$type, dispose -> StreamSink');
       return disposable.close();
     }
     if (disposable is Sink) {
+      print('$type, dispose -> Sink');
       disposable.close();
     }
     return null;
@@ -95,7 +119,7 @@ class DisposeBag implements DisposeBagBase {
     bool isValidate = disposable is StreamSubscription || disposable is Sink;
     if (!isValidate) {
       throw ArgumentError.value(
-          disposable, 'disposable', 'must be a StreamSubscription or a Sink');
+          disposable, 'disposable', 'must be a StreamSubscription, or a Sink');
     }
   }
 
@@ -112,7 +136,7 @@ extension IterableNullableExtension<T extends Object> on Iterable<T?> {
 }
 
 extension IterableConvert<T> on Iterable<T> {
-  Iterable<T> convertNotNull<E>() {
+  Iterable<T> convertToSet<E>() {
     Iterable<T> iterable = this;
     if (iterable is! List && iterable is! Set) {
       iterable = iterable.toList(growable: false);

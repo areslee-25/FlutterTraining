@@ -6,7 +6,7 @@ abstract class BaseBloc<T extends BaseState> extends BlocBase<T> {
 
   final DisposeBag? disposeBag;
 
-  void onClear() async {
+  void onClear() {
     close();
     disposeBag?.clear();
   }
