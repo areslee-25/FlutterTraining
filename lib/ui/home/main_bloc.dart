@@ -1,12 +1,9 @@
 import 'package:untitled/base/base_bloc.dart';
 
-class MainBloc extends BaseBloc<EmptyState> {
-  MainBloc._() : super(EmptyState());
+class MainBloc extends BaseBloc {
+  MainBloc._();
 
   factory MainBloc() {
     return MainBloc._();
   }
-
-  @override
-  void dispose() {}
 }

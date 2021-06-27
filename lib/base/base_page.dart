@@ -48,7 +48,7 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
   void dispose() async {
     print('--------------------------------');
     print('Dispose $T');
-    bloc.dispose();
+    bloc.onClear();
     super.dispose();
   }
 
