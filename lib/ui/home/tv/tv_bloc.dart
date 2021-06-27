@@ -45,7 +45,7 @@ class TvBloc extends BaseBloc {
     final streams = [loadDataStream];
 
     return TvBloc._(
-      disposeBag: DisposeBag([loadMovieControllers, streams]),
+      disposeBag: DisposeBag([...controllers, ...streams]),
       dataList: loadDataStream,
     );
   }

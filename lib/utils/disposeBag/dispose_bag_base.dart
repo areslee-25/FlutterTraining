@@ -6,5 +6,7 @@ abstract class DisposeBagBase {
   /// [disposables] must be an [Iterable] of [StreamSubscription]s or a [Sink]s.
   Future<void> addAll(Iterable<Object> disposables);
 
+  Future<bool> remove(Object disposable);
+
   Future<void> clear();
 }

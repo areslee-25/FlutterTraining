@@ -28,10 +28,10 @@ class SearchBloc extends BaseBloc<SearchState> {
         .startWith(SearchNoTerm());
 
     final controller = [onTextChanged];
-    final streams = [searchStream];
+    final streams = [searchStream.share()];
 
     return SearchBloc._(
-      disposeBag: DisposeBag([controller, streams]),
+      disposeBag: DisposeBag([...controller, ...streams]),
       onTextChanged: onTextChanged,
       searchStream: searchStream,
     );
