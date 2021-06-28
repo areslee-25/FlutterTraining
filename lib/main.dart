@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/data/source/remote/AppClient.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/main_page.dart';
@@ -13,20 +13,16 @@ import 'data/source/remote/repository/movie_repository.dart';
 import 'ui/home/detail/movie_detail_bloc.dart';
 import 'ui/home/detail/movie_detail_page.dart';
 
-final apiService = ApiService();
-final movieRepository = MovieRepositoryImpl(apiService);
-
 void main() {
+  final apiService = ApiService();
+  final movieRepository = MovieRepositoryImpl(apiService);
+
   final repositoryProviders = [
-    RepositoryProvider<ApiService>(
-      create: (context) => apiService,
-    ),
-    RepositoryProvider<MovieRepository>(
-      create: (context) => movieRepository,
-    ),
+    Provider<ApiService>.value(value: apiService),
+    Provider<MovieRepository>.value(value: movieRepository),
   ];
 
-  runApp(MultiRepositoryProvider(
+  runApp(MultiProvider(
     providers: repositoryProviders,
     child: MyApp(),
   ));
@@ -40,20 +36,20 @@ class MyApp extends StatelessWidget {
       SplashPage.routeName: (context) => SplashPage(),
       TutorialPage.routeName: (context) => TutorialPage(),
       MainPage.routeName: (context) {
-        return BlocProvider(
+        return Provider(
           create: (context) => MainBloc(),
           child: MainPage(),
         );
       },
       SearchPage.routeName: (context) {
-        return BlocProvider(
+        return Provider(
           create: (context) => SearchBloc(context.read<MovieRepository>()),
           child: SearchPage(),
         );
       },
       MovieDetailPage.routeName: (context) {
         Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
-        return BlocProvider(
+        return Provider(
           create: (context) => MovieDetailBloc(),
           child: MovieDetailPage(movie: movie),
         );

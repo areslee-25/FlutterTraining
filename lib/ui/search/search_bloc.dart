@@ -7,7 +7,7 @@ import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
 import 'search_sate.dart';
 
-class SearchBloc extends BaseBloc<SearchState> {
+class SearchBloc extends BaseBloc {
   final Sink<String> onTextChanged;
   final Stream<SearchState> searchStream;
 
@@ -15,7 +15,7 @@ class SearchBloc extends BaseBloc<SearchState> {
     required DisposeBag disposeBag,
     required this.onTextChanged,
     required this.searchStream,
-  }) : super(disposeBag, SearchEmpty());
+  }) : super(disposeBag);
 
   factory SearchBloc(MovieRepository movieRepository) {
     // ignore: close_sinks
