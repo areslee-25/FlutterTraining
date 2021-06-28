@@ -11,7 +11,7 @@ abstract class MovieRepository {
   Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID);
 }
 
-class MovieRepositoryImpl implements MovieRepository {
+class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
   final ApiService _apiService;
 
   MovieRepositoryImpl(this._apiService);
@@ -35,14 +35,24 @@ class MovieRepositoryImpl implements MovieRepository {
     });
 
     final results = await _apiService.getItem(uri);
+    return safeApiCall(
+      call: _apiService.getItem(uri),
+      mapper: (response) {
+        final data = (response as dynamic)[KeyPrams.results] as List;
+        return data.map((item) => Movie.fromJson(item)).toList();
+      },
+    );
+
     final data = results[KeyPrams.results] as List;
     return data.map((item) => Movie.fromJson(item)).toList();
   }
 
-  Future<Movie> getMovieDetail(
-      MovieTypeStatus status, int movieID) async {
+  Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID) async {
     Uri uri = createUri(status.toValue() + '$movieID');
 
+    return safeApiCall(
+        call: _apiService.getItem(uri),
+        mapper: (response) => Movie.fromJson(response as dynamic));
     final results = await _apiService.getItem(uri);
     return Movie.fromJson(results);
   }

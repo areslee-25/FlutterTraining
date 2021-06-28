@@ -413,7 +413,7 @@ class _MovieDetailPageState
       stream: bloc.movieStream,
       builder: (context, snapShot) {
         final Movie? data = snapShot.data as Movie?;
-        if (data == null) {
+        if (data == null || data.companies.isEmpty) {
           return const SizedBox();
         }
         return Column(

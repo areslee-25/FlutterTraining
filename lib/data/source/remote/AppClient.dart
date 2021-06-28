@@ -42,25 +42,13 @@ abstract class AppClient extends BaseClient {
   static dynamic _processData(Response response) {
     final statusCode = response.statusCode;
     final body = jsonDecode(response.body);
-
     print('Body Json: $body');
 
-    if (HttpStatus.ok <= statusCode && statusCode <= 300) {
+    if (HttpStatus.ok <= statusCode && statusCode < 300) {
       return body;
     }
 
-    AppError appError;
-
-    if (statusCode == HttpStatus.unauthorized) {
-      appError = AppError.toUnauthorized();
-    } else {
-      try {
-        appError = ErrorResponse.fromJson(body).toSeverError();
-      } catch (e) {
-        appError = AppError.toUnknown();
-      }
-    }
-
+    AppError appError = AppError.toError(body, statusCode);
     print('-----------------------------------------------------------');
     print('ErrorResponse: ' + appError.message);
 

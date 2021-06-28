@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:untitled/data/source/remote/repository/base_repository.dart';
 
 enum AppErrorType {
@@ -5,6 +7,7 @@ enum AppErrorType {
   unauthorized,
   server,
   unknown,
+  response_null,
 }
 
 class ErrorResponse {
@@ -35,8 +38,13 @@ class AppError {
     required this.type,
   });
 
-  factory AppError.toUnknown() => AppError(
-        message: "Unknown Exception",
+  factory AppError.network() => AppError(
+        message: "Network Exception",
+        type: AppErrorType.network,
+      );
+
+  factory AppError.toUnknown([Object? exception]) => AppError(
+        message: "Unknown Exception: $exception",
         type: AppErrorType.unknown,
       );
 
@@ -44,4 +52,31 @@ class AppError {
         message: "Unauthorized 401",
         type: AppErrorType.unauthorized,
       );
+
+  factory AppError.toResponseNull() => AppError(
+        message: "Response Null",
+        type: AppErrorType.response_null,
+      );
+
+  factory AppError.toError(dynamic body, int statusCode) {
+    AppError appError;
+    switch (statusCode) {
+      case HttpStatus.unauthorized:
+        appError = AppError.toUnauthorized();
+        break;
+      case HttpStatus.networkConnectTimeoutError:
+      case HttpStatus.gatewayTimeout:
+      case HttpStatus.requestTimeout:
+        appError = AppError.network();
+        break;
+      default:
+        try {
+          appError = ErrorResponse.fromJson(body).toSeverError();
+        } catch (exception) {
+          appError = AppError.toUnknown(exception);
+        }
+        break;
+    }
+    return appError;
+  }
 }
