@@ -8,7 +8,7 @@ abstract class MovieRepository {
 
   Future<List<Movie>> searchMovie(String keyword, int page);
 
-  Future<List<Movie>> getMovieDetail(MovieTypeStatus status, int movieID);
+  Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID);
 }
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -24,8 +24,7 @@ class MovieRepositoryImpl implements MovieRepository {
     });
 
     final results = await _apiService.getItem(uri);
-    final data = results[KeyPrams.results] as List;
-    return data.map((item) => MovieResponse.fromJson(item).toMovie()).toList();
+    return MovieResponse.fromJson(results).list;
   }
 
   @override
@@ -37,16 +36,15 @@ class MovieRepositoryImpl implements MovieRepository {
 
     final results = await _apiService.getItem(uri);
     final data = results[KeyPrams.results] as List;
-    return data.map((item) => MovieResponse.fromJson(item).toMovie()).toList();
+    return data.map((item) => Movie.fromJson(item)).toList();
   }
 
-  Future<List<Movie>> getMovieDetail(
+  Future<Movie> getMovieDetail(
       MovieTypeStatus status, int movieID) async {
     Uri uri = createUri(status.toValue() + '$movieID');
 
     final results = await _apiService.getItem(uri);
-    final data = results[KeyPrams.results] as List;
-    return data.map((item) => MovieResponse.fromJson(item).toMovie()).toList();
+    return Movie.fromJson(results);
   }
 }
 

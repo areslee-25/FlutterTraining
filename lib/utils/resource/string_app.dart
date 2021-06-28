@@ -11,4 +11,6 @@ class StringApp {
   static const String people_awaiting = 'People Awaiting';
   static const String favorite = 'FAVORITE';
   static const String comment = 'COMMENT';
+
+  static const String full_cast = 'Full Cast & Crew';
 }
