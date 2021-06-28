@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/ui/home/detail/movie_detail_bloc.dart';
@@ -57,8 +59,9 @@ class _MovieDetailPageState
             ),
           ),
           _buildOverview(),
-          _buildCastList(context),
+          _buildCompanies(),
           _buildBottomButton(context),
+          SizedBox(height: getPaddingBottom(context)),
         ],
       ),
     );
@@ -236,10 +239,6 @@ class _MovieDetailPageState
     );
   }
 
-  Widget _buildCastList(BuildContext context) {
-    return Container();
-  }
-
   Widget _buildBottomButton(BuildContext context) {
     final height = 100 * getRatio(context);
     final itemSize = height * 0.75;
@@ -406,6 +405,100 @@ class _MovieDetailPageState
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildCompanies() {
+    return StreamBuilder(
+      stream: bloc.movieStream,
+      builder: (context, snapShot) {
+        final Movie? data = snapShot.data as Movie?;
+        if (data == null) {
+          return const SizedBox();
+        }
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 20,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  StringApp.full_cast,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 180 * 375 / getScreenWidth(context),
+              child: ListView.builder(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                itemCount: data.companies.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return CompanyItem(data.companies[index]);
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class CompanyItem extends BaseItemCell {
+  final Company company;
+
+  const CompanyItem(this.company) : super(company);
+
+  @override
+  Widget buildItem(BuildContext context, data) {
+    final height = 160 * 375 / getScreenWidth(context) - 20;
+    final width = height / 102 * 70;
+    return Container(
+      width: width,
+      height: height,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: [
+          Expanded(
+            child: PhysicalModel(
+              color: Colors.transparent,
+              elevation: 10,
+              shadowColor: Colors.transparent,
+              borderRadius: BorderRadius.circular(24),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: buildImage(company.imageUrl),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 18,
+            child: Text(
+              company.name,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                height: 1.3,
+                fontSize: 14,
+                color: ColorApp.color_text_33,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

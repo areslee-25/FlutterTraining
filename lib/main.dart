@@ -50,7 +50,8 @@ class MyApp extends StatelessWidget {
       MovieDetailPage.routeName: (context) {
         Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
         return Provider(
-          create: (context) => MovieDetailBloc(),
+          create: (context) =>
+              MovieDetailBloc(context.read<MovieRepository>(), movie),
           child: MovieDetailPage(movie: movie),
         );
       }

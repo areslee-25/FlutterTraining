@@ -7,7 +7,7 @@ class DisposeBag implements DisposeBagBase {
 
   DisposeBag([Iterable<Object> disposables = const <Object>[]]) {
     disposables = disposables.convertToSet();
-    //   _guardTypeMany(disposables);
+    _guardTypeMany(disposables);
     _resources = Set.of(disposables);
   }
 
