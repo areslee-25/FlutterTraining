@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/base/base_bloc.dart';
 
 abstract class BaseStateLess extends StatelessWidget {
@@ -40,7 +40,7 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
     super.initState();
     print('--------------------------------');
     print('initState $T, $B');
-    bloc = BlocProvider.of<B>(context);
+    bloc = context.read<B>();
     init();
   }
 

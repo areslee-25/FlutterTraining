@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
@@ -23,7 +23,7 @@ class MainPage extends BaseStateFul {
 class _MainPageState extends BaseBlocState<MainPage, MainBloc> {
   static final movieRoutes = <String, NavigationWidgetBuilder>{
     Navigator.defaultRouteName: (context, setting) {
-      return BlocProvider(
+      return Provider(
         create: (context) => MovieBloc(context.read<MovieRepository>()),
         child: MoviePage(),
       );
@@ -32,7 +32,7 @@ class _MainPageState extends BaseBlocState<MainPage, MainBloc> {
 
   static final tvRoutes = <String, NavigationWidgetBuilder>{
     Navigator.defaultRouteName: (context, setting) {
-      return BlocProvider(
+      return Provider(
         create: (context) => TvBloc(context.read<MovieRepository>()),
         child: TvPage(),
       );
