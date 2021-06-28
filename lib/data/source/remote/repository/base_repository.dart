@@ -1,3 +1,4 @@
+import 'package:untitled/data/source/remote/response/error_response.dart';
 import 'package:untitled/utils/env.dart';
 
 class KeyPrams {
@@ -69,4 +70,23 @@ dynamic formatJsonData<T>(dynamic data) {
       break;
   }
   return result as T;
+}
+
+typedef ResponseToModelMapper<json, Model> = Model Function(json response);
+
+abstract class BaseRepository {
+  Future<Model> safeApiCall<json, Model>(
+      {required Future<json> call,
+      required ResponseToModelMapper<json, Model> mapper}) async {
+    try {
+      final response = await call;
+      if (response != null) {
+        return mapper.call(response);
+      } else {
+        throw AppError.toResponseNull();
+      }
+    } catch (exception) {
+      rethrow;
+    }
+  }
 }
