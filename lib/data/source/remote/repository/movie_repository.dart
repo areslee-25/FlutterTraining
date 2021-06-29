@@ -1,4 +1,7 @@
 import 'package:untitled/data/model/movie.dart';
+import 'package:untitled/data/model/video.dart';
+import 'package:untitled/data/source/remote/response/movie_response.dart';
+import 'package:untitled/data/source/remote/response/video_response.dart';
 
 import '../remote.dart';
 
@@ -8,6 +11,8 @@ abstract class MovieRepository {
   Future<List<Movie>> searchMovie(String keyword, int page);
 
   Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID);
+
+  Future<Video> getVideo(int movieID);
 }
 
 class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
@@ -23,12 +28,8 @@ class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
     });
 
     return safeApiCall<dynamic, List<Movie>>(
-      call: _apiService.getItem(uri),
-      mapper: (response) {
-        final data = response[KeyPrams.results] as List;
-        return data.map((item) => Movie.fromJson(item)).toList();
-      },
-    );
+        call: _apiService.getItem(uri),
+        mapper: (response) => MovieResponse.fromJson(response).list);
   }
 
   @override
@@ -39,12 +40,8 @@ class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
     });
 
     return safeApiCall<dynamic, List<Movie>>(
-      call: _apiService.getItem(uri),
-      mapper: (response) {
-        final data = response[KeyPrams.results] as List;
-        return data.map((item) => Movie.fromJson(item)).toList();
-      },
-    );
+        call: _apiService.getItem(uri),
+        mapper: (response) => MovieResponse.fromJson(response).list);
   }
 
   Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID) async {
@@ -53,6 +50,14 @@ class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
     return safeApiCall<dynamic, Movie>(
         call: _apiService.getItem(uri),
         mapper: (response) => Movie.fromJson(response));
+  }
+
+  Future<Video> getVideo(int movieID) async {
+    Uri uri = createUri(KeyPrams.v3_movie + '$movieID/videos');
+
+    return safeApiCall<dynamic, Video>(
+        call: _apiService.getItem(uri),
+        mapper: (response) => VideoResponse.fromJson(response).video);
   }
 }
 

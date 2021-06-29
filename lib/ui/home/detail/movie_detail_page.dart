@@ -5,7 +5,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
+import 'package:untitled/data/model/video.dart';
 import 'package:untitled/ui/home/detail/movie_detail_bloc.dart';
+import 'package:untitled/ui/home/video/video_page.dart';
 import 'package:untitled/utils/extension/image_etx.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
@@ -35,7 +37,7 @@ class _MovieDetailPageState
       body: Stack(
         children: [
           _buildContentScroll(context),
-          _BackButton(margin: const EdgeInsets.only(left: 20, top: 20)),
+          BuildBackButton(),
         ],
       ),
     );
@@ -77,29 +79,49 @@ class _MovieDetailPageState
           height: height,
           child: buildImage(widget.movie.imageUrl, BoxFit.cover),
         ),
-        Container(
-          width: heightIcon,
-          height: heightIcon,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(heightIcon / 2),
-            gradient: LinearGradient(
-              begin: FractionalOffset(0.0, 0.5),
-              end: FractionalOffset(1.0, 1.0),
-              colors: [
-                Color.fromRGBO(249, 159, 0, 1),
-                Color.fromRGBO(219, 48, 105, 1),
-              ],
-            ),
-          ),
-          child: InkWell(
-            onTap: () {},
-            child: const Icon(
-              Icons.play_arrow_rounded,
-              size: 40,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        StreamBuilder(
+          stream: bloc.videoStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            }
+            final Video video = snapshot.data as Video;
+            return AnimatedOpacity(
+              opacity: 1,
+              duration: const Duration(milliseconds: 500),
+              child: Container(
+                width: heightIcon,
+                height: heightIcon,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(heightIcon / 2),
+                  gradient: LinearGradient(
+                    begin: FractionalOffset(0.0, 0.5),
+                    end: FractionalOffset(1.0, 1.0),
+                    colors: [
+                      Color.fromRGBO(249, 159, 0, 1),
+                      Color.fromRGBO(219, 48, 105, 1),
+                    ],
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () => NavigateUtils.pushNamed(
+                    context,
+                    VideoPage.routeName,
+                    arguments: snapshot.data,
+                  ),
+                  child: Hero(
+                    tag: video.id,
+                    child: const Icon(
+                      Icons.play_arrow_rounded,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        )
       ],
     );
   }
@@ -503,11 +525,10 @@ class CompanyItem extends BaseItemCell {
   }
 }
 
-class _BackButton extends BaseStateLess {
-  const _BackButton({Key? key, this.onTap, this.margin}) : super(key: key);
+class BuildBackButton extends BaseStateLess {
+  const BuildBackButton({Key? key, this.onTap}) : super(key: key);
 
   final GestureTapCallback? onTap;
-  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
@@ -517,8 +538,8 @@ class _BackButton extends BaseStateLess {
       onTap: onTap != null ? onTap : () => NavigateUtils.pop(context),
       child: Ink(
         child: Container(
-          margin: margin,
-          padding: EdgeInsets.only(top: paddingTop),
+          color: Colors.transparent,
+          margin: EdgeInsets.only(left: 20, top: 20 + paddingTop),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
