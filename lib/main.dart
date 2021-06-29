@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/data/source/remote/AppClient.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/main_page.dart';
 import 'package:untitled/ui/search/search_bloc.dart';
@@ -9,7 +8,7 @@ import 'package:untitled/ui/splash/splash_page.dart';
 import 'package:untitled/ui/tutorial/tutorial_page.dart';
 
 import 'data/model/movie.dart';
-import 'data/source/remote/repository/movie_repository.dart';
+import 'data/source/remote/remote.dart';
 import 'ui/home/detail/movie_detail_bloc.dart';
 import 'ui/home/detail/movie_detail_page.dart';
 

@@ -41,6 +41,7 @@ abstract class AppClient extends BaseClient {
 
   static dynamic _processData(Response response) {
     final statusCode = response.statusCode;
+
     final body = jsonDecode(response.body);
     print('Body Json: $body');
 
