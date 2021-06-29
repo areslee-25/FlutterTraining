@@ -1,4 +1,4 @@
-import 'package:untitled/data/source/remote/repository/base_repository.dart';
+import 'package:untitled/data/source/remote/remote.dart';
 
 class Movie {
   final int id;
@@ -33,16 +33,16 @@ class Movie {
   String get imageUrl => backdropUrl.isNotEmpty ? posterUrl : backdropUrl;
 
   factory Movie.fromJson(Map<String, dynamic> json) => Movie(
-        id: jsonDecode<int>(json, "id"),
-        title: jsonDecode(json, 'title', alternativeKey: 'original_name'),
-        posterUrl: KeyPrams.imgPath + jsonDecode(json, "poster_path"),
-        backdropUrl: KeyPrams.imgPath + jsonDecode(json, 'backdrop_path'),
-        voteAverage: jsonDecode<double>(json, 'vote_average').toString(),
-        overview: jsonDecode(json, "overview"),
+        id: json.decode<int>("id"),
+        title: json.decode('title', alternativeKey: 'original_name'),
+        posterUrl: KeyPrams.imgPath + json.decode("poster_path"),
+        backdropUrl: KeyPrams.imgPath + json.decode('backdrop_path'),
+        voteAverage: json.decode<double>('vote_average').toString(),
+        overview: json.decode("overview"),
         releaseDate:
-            jsonDecode(json, 'release_date', alternativeKey: 'first_air_date'),
-        voteCount: jsonDecode<int>(json, "vote_count"),
-        popularity: jsonDecode<double>(json, "popularity"),
+            json.decode('release_date', alternativeKey: 'first_air_date'),
+        voteCount: json.decode<int>("vote_count"),
+        popularity: json.decode<double>("popularity"),
         companies: json['production_companies'] == null
             ? []
             : (json['production_companies'] as List)
@@ -63,8 +63,8 @@ class Company {
   });
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
-        id: jsonDecode<int>(json, "id"),
-        imageUrl: KeyPrams.imgPath + jsonDecode(json, "logo_path"),
-        name: jsonDecode(json, "name"),
+        id: json.decode<int>("id"),
+        imageUrl: KeyPrams.imgPath + json.decode("logo_path"),
+        name: json.decode("name"),
       );
 }

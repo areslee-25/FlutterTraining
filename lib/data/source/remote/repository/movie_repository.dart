@@ -1,7 +1,6 @@
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/data/source/remote/AppClient.dart';
-import 'package:untitled/data/source/remote/repository/base_repository.dart';
-import 'package:untitled/data/source/remote/response/movie_response.dart';
+
+import '../remote.dart';
 
 abstract class MovieRepository {
   Future<List<Movie>> getMovieList(MovieTypeStatus status, [int page = 1]);
@@ -23,8 +22,13 @@ class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
       KeyPrams.page: '$page',
     });
 
-    final results = await _apiService.getItem(uri);
-    return MovieResponse.fromJson(results).list;
+    return safeApiCall<dynamic, List<Movie>>(
+      call: _apiService.getItem(uri),
+      mapper: (response) {
+        final data = response[KeyPrams.results] as List;
+        return data.map((item) => Movie.fromJson(item)).toList();
+      },
+    );
   }
 
   @override
@@ -34,27 +38,21 @@ class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
       KeyPrams.page: '$page',
     });
 
-    final results = await _apiService.getItem(uri);
-    return safeApiCall(
+    return safeApiCall<dynamic, List<Movie>>(
       call: _apiService.getItem(uri),
       mapper: (response) {
-        final data = (response as dynamic)[KeyPrams.results] as List;
+        final data = response[KeyPrams.results] as List;
         return data.map((item) => Movie.fromJson(item)).toList();
       },
     );
-
-    final data = results[KeyPrams.results] as List;
-    return data.map((item) => Movie.fromJson(item)).toList();
   }
 
   Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID) async {
     Uri uri = createUri(status.toValue() + '$movieID');
 
-    return safeApiCall(
+    return safeApiCall<dynamic, Movie>(
         call: _apiService.getItem(uri),
-        mapper: (response) => Movie.fromJson(response as dynamic));
-    final results = await _apiService.getItem(uri);
-    return Movie.fromJson(results);
+        mapper: (response) => Movie.fromJson(response));
   }
 }
 
