@@ -1,5 +1,6 @@
-import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/data/source/remote/core//key_params.dart';
+import 'package:untitled/data/model/base_model.dart';
+
+import '../remote.dart';
 
 class MovieResponse {
   final List<Movie> list;

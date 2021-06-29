@@ -8,8 +8,7 @@ import 'package:untitled/ui/search/search_page.dart';
 import 'package:untitled/ui/splash/splash_page.dart';
 import 'package:untitled/ui/tutorial/tutorial_page.dart';
 
-import 'data/model/movie.dart';
-import 'data/model/video.dart';
+import 'data/model/base_model.dart';
 import 'data/source/remote/remote.dart';
 import 'ui/home/detail/movie_detail_bloc.dart';
 import 'ui/home/detail/movie_detail_page.dart';

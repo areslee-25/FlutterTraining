@@ -1,4 +1,4 @@
-import 'package:untitled/data/source/remote/response/error_response.dart';
+import 'package:untitled/data/source/remote/remote.dart';
 import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
 abstract class BaseBloc {

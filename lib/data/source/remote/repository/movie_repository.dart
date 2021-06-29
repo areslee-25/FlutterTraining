@@ -1,5 +1,5 @@
-import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/data/model/video.dart';
+
+import 'package:untitled/data/model/base_model.dart';
 import 'package:untitled/data/source/remote/response/movie_response.dart';
 import 'package:untitled/data/source/remote/response/video_response.dart';
 

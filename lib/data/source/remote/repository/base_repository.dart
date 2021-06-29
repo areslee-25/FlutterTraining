@@ -1,6 +1,8 @@
-import 'package:untitled/data/source/remote/core/key_params.dart';
-import 'package:untitled/data/source/remote/response/error_response.dart';
+import 'dart:async';
+
 import 'package:untitled/utils/env.dart';
+
+import '../remote.dart';
 
 typedef ResponseToModelMapper<Response, Model> = Model Function(
     Response response);
@@ -30,7 +32,10 @@ abstract class BaseRepository {
         throw AppError.toResponseNull();
       }
     } catch (exception) {
-      rethrow;
+      if (exception is AppError) {
+        throw exception;
+      }
+      throw AppError.toUnknown(0, exception);
     }
   }
 }
