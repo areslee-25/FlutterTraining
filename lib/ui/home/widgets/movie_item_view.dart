@@ -82,10 +82,7 @@ class MovieItemCell extends BaseItemCell<Movie> {
         borderRadius: BorderRadius.circular(6),
         child: Stack(
           children: [
-            Hero(
-              tag: movie.id,
-              child: buildImage(movie.posterUrl),
-            ),
+            buildImage(movie.posterUrl),
             Align(
               alignment: Alignment.topRight,
               child: buildAverage(movie),

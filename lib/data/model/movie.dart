@@ -1,6 +1,7 @@
+import 'package:untitled/data/model/base_model.dart';
 import 'package:untitled/data/source/remote/remote.dart';
 
-class Movie {
+class Movie extends BaseModel {
   final int id;
   final String title;
   final String posterUrl;
