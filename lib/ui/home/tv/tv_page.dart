@@ -23,7 +23,7 @@ class _TvPageState extends BaseBlocState<TvPage, TvBloc> {
   void init() {}
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<Tuple2<List<Movie>, List<Movie>>>(
         stream: bloc.dataList,

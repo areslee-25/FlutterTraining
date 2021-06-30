@@ -20,4 +20,9 @@ class ImageApp {
   static const String ic_favorite_white = img_path + 'star_white.png';
   static const String ic_comment = img_path + 'comment.png';
   static const String ic_comment_white = img_path + 'comment_white.png';
+
+  static const String bg_login = img_path + 'bg_login.png';
+  static const String top_login = img_path + 'top_login.png';
+  static const String center_login = img_path + 'center_login.png';
+  static const String bottom_login = img_path + 'bottom_login.png';
 }

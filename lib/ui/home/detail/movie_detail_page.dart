@@ -32,7 +32,7 @@ class _MovieDetailPageState
   void init() {}
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [

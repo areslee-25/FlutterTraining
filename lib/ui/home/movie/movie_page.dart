@@ -21,7 +21,7 @@ class _MoviePageState extends BaseBlocState<MoviePage, MovieBloc> {
   void init() {}
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<Tuple3<List<Movie>, List<Movie>, List<Movie>>>(
         stream: bloc.dataList,

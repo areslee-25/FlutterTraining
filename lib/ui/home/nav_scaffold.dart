@@ -56,7 +56,7 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
   }
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(

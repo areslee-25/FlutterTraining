@@ -1,7 +1,7 @@
 import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/model/movie.dart';
 
-class SearchState extends BaseState {}
+class SearchState extends BaseStatus {}
 
 class SearchLoading extends SearchState {}
 

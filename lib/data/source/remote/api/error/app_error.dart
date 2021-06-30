@@ -8,7 +8,7 @@ class AppError {
   final String message;
   final AppErrorType type;
 
-  AppError({
+  const AppError({
     required this.statusCode,
     required this.message,
     required this.type,
@@ -24,6 +24,13 @@ class AppError {
       case HttpStatus.gatewayTimeout:
       case HttpStatus.requestTimeout:
         appError = AppError.network(statusCode);
+        break;
+      case HttpStatus.notFound:
+        appError = AppError(
+          statusCode: statusCode,
+          message: 'HttpStatus NotFound',
+          type: AppErrorType.network,
+        );
         break;
       default:
         try {

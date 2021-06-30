@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/data/source/local/local.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/main_page.dart';
 import 'package:untitled/ui/home/video/video_page.dart';
+import 'package:untitled/ui/login/login_bloc.dart';
+import 'package:untitled/ui/login/login_page.dart';
 import 'package:untitled/ui/search/search_bloc.dart';
 import 'package:untitled/ui/search/search_page.dart';
 import 'package:untitled/ui/splash/splash_page.dart';
@@ -17,9 +20,13 @@ void main() {
   final apiService = ApiService();
   final movieRepository = MovieRepositoryImpl(apiService);
 
+  final userLocalDataSource = UserLocalSourceImpl();
+  final userRepository = UserRepositoryImpl(apiService, userLocalDataSource);
+
   final repositoryProviders = [
     Provider<ApiService>.value(value: apiService),
     Provider<MovieRepository>.value(value: movieRepository),
+    Provider<UserRepository>.value(value: userRepository),
   ];
 
   runApp(MultiProvider(
@@ -35,6 +42,12 @@ class MyApp extends StatelessWidget {
     final routes = <String, WidgetBuilder>{
       SplashPage.routeName: (context) => SplashPage(),
       TutorialPage.routeName: (context) => TutorialPage(),
+      LoginPage.routeName: (context) {
+        return Provider(
+          create: (context) => LoginBloc(context.read<UserRepository>()),
+          child: LoginPage(),
+        );
+      },
       MainPage.routeName: (context) {
         return Provider(
           create: (context) => MainBloc(),
@@ -61,12 +74,13 @@ class MyApp extends StatelessWidget {
       },
     };
 
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Provider<Map<String, WidgetBuilder>>.value(
+      value: routes,
+      child: MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: SplashPage(),
+        routes: routes,
       ),
-      home: SplashPage(),
-      routes: routes,
     );
   }
 }

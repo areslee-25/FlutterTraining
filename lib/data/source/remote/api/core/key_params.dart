@@ -5,6 +5,10 @@ class KeyPrams {
   static const String results = 'results';
   static const String page = 'page';
   static const String query = 'query';
+  static const String user_name = 'username';
+  static const String password = 'password';
+  static const String request_token = 'request_token';
+  static const String session_id = 'session_id';
 
   static const String v4_list = '/4/list/';
 
@@ -17,4 +21,10 @@ class KeyPrams {
   static const String v3_tv_now = '/3/tv/airing_today';
   static const String v3_tv_popular = '/3/tv/popular';
   static const String v3_tv = '/3/tv/';
+  static const String v3_authentication_token = '/3/authentication/token/new';
+  static const String v3_authentication_login =
+      '/3/authentication/token/validate_with_login';
+  static const String v3_account = '/3/account';
+  static const String v3_authentication_session =
+      '/3/authentication/session/new';
 }

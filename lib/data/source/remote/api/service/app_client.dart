@@ -6,19 +6,25 @@ import 'package:http/http.dart';
 import '../../remote.dart';
 
 abstract class AppClient extends BaseClient {
-  Future<dynamic> getItem(Uri uri) => this.get(uri).then(_processData);
-
-  Future<dynamic> postItem(Uri url, {Map<String, dynamic>? body}) {
-    return this.post(url, body: jsonEncode(body)).then(_processData);
+  Future<dynamic> getItem(Uri url) {
+    return this.get(url).then(_processData);
   }
 
-  Future<dynamic> putItem(Uri url, {Map<String, dynamic>? body}) {
+  Future<dynamic> postItem({required Uri url, Map<String, dynamic>? body}) {
+    final jsonBody = jsonEncode(body);
+    print('Post Body: $jsonBody');
+    return this.post(url, body: jsonBody).then(_processData);
+  }
+
+  Future<dynamic> putItem({required Uri url, Map<String, dynamic>? body}) {
     return this
         .put(url, body: body != null ? jsonEncode(body) : null)
         .then(_processData);
   }
 
-  Future<dynamic> deleteItem(dynamic url) => this.delete(url).then(_processData);
+  Future<dynamic> deleteItem(Uri url) {
+    return this.delete(url).then(_processData);
+  }
 
   static dynamic _processData(Response response) {
     final statusCode = response.statusCode;

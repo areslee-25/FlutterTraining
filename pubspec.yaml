@@ -23,10 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   provider: ^5.0.0
   rxdart: ^0.27.1
+
   http: ^0.13.3
   cached_network_image: ^3.0.0
+
+  sqflite: ^2.0.0+3
+  shared_preferences: ^2.0.6
+
   tuple: ^2.0.0
   flutter_rating_bar: ^4.0.0
   youtube_player_flutter: ^8.0.0

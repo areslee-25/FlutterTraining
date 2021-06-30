@@ -43,7 +43,7 @@ class _MainPageState extends BaseBlocState<MainPage, MainBloc> {
   void init() {}
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return NavigationScaffold(
       barItems: [
         BottomNavigationBarItem(

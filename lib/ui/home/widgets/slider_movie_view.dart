@@ -29,7 +29,7 @@ class _SliderMovieViewState extends BaseState<SliderMovieView> {
   void init() {}
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     if (widget.dataList.isEmpty) {
       return const SizedBox();
     }

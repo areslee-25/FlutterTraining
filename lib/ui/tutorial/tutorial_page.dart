@@ -44,7 +44,7 @@ class _TutorialPageState extends BaseState<TutorialPage> {
   }
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         top: false,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/ui/tutorial/tutorial_page.dart';
+import 'package:untitled/ui/login/login_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
@@ -15,10 +16,13 @@ class SplashPage extends BaseStateFul {
 
 class _SplashPageState extends BaseState<SplashPage> {
   @override
-  void init() {}
+  void init() {
+    final routes = context.read<Map<String, WidgetBuilder>>();
+    print(routes);
+  }
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -50,8 +54,7 @@ class _SplashPageState extends BaseState<SplashPage> {
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.black),
                   onPressed: () {
-                    NavigateUtils.pushNamedToRoot(
-                        context, TutorialPage.routeName);
+                    NavigateUtils.pushNamed(context, LoginPage.routeName);
                   },
                   child: Text(
                     'Flutter Training'.toUpperCase(),
