@@ -13,7 +13,7 @@ abstract class BaseStateFul extends StatefulWidget {
 abstract class BaseState<T extends BaseStateFul> extends State<T> {
   void init();
 
-  Widget buildUI(BuildContext context);
+  Widget builder(BuildContext context);
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ abstract class BaseState<T extends BaseStateFul> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    return buildUI(context);
+    return builder(context);
   }
 }
 
@@ -31,29 +31,31 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
     extends State<T> {
   void init();
 
-  late B bloc;
+  late B _bloc;
 
-  Widget buildUI(BuildContext context);
+  B get bloc => _bloc;
+
+  Widget builder(BuildContext context);
 
   @override
   void initState() {
     super.initState();
     print('--------------------------------');
     print('initState $T, $B');
-    bloc = context.read<B>();
+    _bloc = context.read<B>();
     init();
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     print('--------------------------------');
     print('Dispose $T');
-    bloc.onClear();
+    _bloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return buildUI(context);
+    return builder(context);
   }
 }

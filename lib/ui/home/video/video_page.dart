@@ -51,7 +51,7 @@ class _VideoPageState extends BaseState<VideoPage> {
   }
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: YoutubePlayerBuilder(

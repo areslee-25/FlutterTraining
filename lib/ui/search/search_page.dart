@@ -34,7 +34,7 @@ class _SearchPageState extends BaseBlocState<SearchPage, SearchBloc> {
   }
 
   @override
-  Widget buildUI(BuildContext context) {
+  Widget builder(BuildContext context) {
     return StreamBuilder<SearchState>(
       stream: bloc.searchStream,
       initialData: SearchNoTerm(),

@@ -4,11 +4,13 @@ import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 abstract class BaseBloc {
   late DisposeBag _disposeBag;
 
+  DisposeBag get disposeBag => _disposeBag;
+
   BaseBloc([DisposeBag? disposeBag]) {
     _disposeBag = disposeBag ?? DisposeBag();
   }
 
-  void onClear() {
+  void dispose() {
     _disposeBag.clear();
   }
 
@@ -24,8 +26,8 @@ abstract class BaseBloc {
   }
 }
 
-abstract class BaseState {}
+abstract class BaseStatus {}
 
-class EmptyState extends BaseState {}
+class EmptyState extends BaseStatus {}
 
-class LoadingState extends BaseState {}
+class LoadingState extends BaseStatus {}

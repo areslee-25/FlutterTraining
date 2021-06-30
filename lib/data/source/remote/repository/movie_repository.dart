@@ -1,4 +1,3 @@
-
 import 'package:untitled/data/model/base_model.dart';
 import 'package:untitled/data/source/remote/response/movie_response.dart';
 import 'package:untitled/data/source/remote/response/video_response.dart';
@@ -23,40 +22,40 @@ class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
   @override
   Future<List<Movie>> getMovieList(MovieTypeStatus status,
       [int page = 1]) async {
-    Uri uri = createUri(status.toValue(), {
+    Uri url = createUri(status.toValue(), {
       KeyPrams.page: '$page',
     });
 
     return safeApiCall<dynamic, List<Movie>>(
-        call: _apiService.getItem(uri),
+        call: _apiService.getItem(url),
         mapper: (response) => MovieResponse.fromJson(response).list);
   }
 
   @override
   Future<List<Movie>> searchMovie(String keyword, int page) async {
-    Uri uri = createUri(KeyPrams.v3_search_movie, {
+    Uri url = createUri(KeyPrams.v3_search_movie, {
       KeyPrams.query: keyword,
       KeyPrams.page: '$page',
     });
 
     return safeApiCall<dynamic, List<Movie>>(
-        call: _apiService.getItem(uri),
+        call: _apiService.getItem(url),
         mapper: (response) => MovieResponse.fromJson(response).list);
   }
 
   Future<Movie> getMovieDetail(MovieTypeStatus status, int movieID) async {
-    Uri uri = createUri(status.toValue() + '$movieID');
+    Uri url = createUri(status.toValue() + '$movieID');
 
     return safeApiCall<dynamic, Movie>(
-        call: _apiService.getItem(uri),
+        call: _apiService.getItem(url),
         mapper: (response) => Movie.fromJson(response));
   }
 
   Future<Video> getVideo(int movieID) async {
-    Uri uri = createUri(KeyPrams.v3_movie + '$movieID/videos');
+    Uri url = createUri(KeyPrams.v3_movie + '$movieID/videos');
 
     return safeApiCall<dynamic, Video>(
-        call: _apiService.getItem(uri),
+        call: _apiService.getItem(url),
         mapper: (response) => VideoResponse.fromJson(response).video);
   }
 }

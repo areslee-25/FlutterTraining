@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:http/io_client.dart';
 import 'package:untitled/utils/env.dart';
 
 import '../remote.dart';
@@ -21,9 +22,8 @@ abstract class BaseRepository {
     return Uri.https(baseUrl, path, query);
   }
 
-  Future<Model> safeApiCall<Response, Model>(
-      {required Future<Response> call,
-      required ResponseToModelMapper<Response, Model> mapper}) async {
+  Future<Model> safeApiCall<Response, Model>({required Future<Response> call,
+    required ResponseToModelMapper<Response, Model> mapper}) async {
     try {
       final response = await call;
       if (response != null) {
