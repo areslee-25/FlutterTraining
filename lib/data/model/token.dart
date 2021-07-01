@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:untitled/data/source/remote/remote.dart';
 
 import 'base_model.dart';
@@ -15,4 +17,14 @@ class Token extends BaseModel {
         token: json.decode("request_token"),
         expiresDate: json.decode("expires_at"),
       );
+
+  Map<String, dynamic> toJson() => {
+        'request_token': token,
+        'expires_at': expiresDate,
+      };
+
+  factory Token.fromStringJson(String stringJson) =>
+      Token.fromJson(jsonDecode(stringJson));
+
+  String toStringJson() => jsonEncode(toJson());
 }

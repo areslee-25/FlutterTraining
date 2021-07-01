@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/data/source/local/local.dart';
+import 'package:untitled/data/source/remote/repository/token_repository.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/main_page.dart';
 import 'package:untitled/ui/home/video/video_page.dart';
@@ -18,15 +19,18 @@ import 'ui/home/detail/movie_detail_page.dart';
 
 void main() {
   final apiService = ApiService();
-  final movieRepository = MovieRepositoryImpl(apiService);
+  final sharePrefsApi = SharedPrefsImpl();
+  final userLocalSource = UserLocalSourceImpl(sharePrefsApi);
 
-  final userLocalDataSource = UserLocalSourceImpl();
-  final userRepository = UserRepositoryImpl(apiService, userLocalDataSource);
+  final movieRepository = MovieRepositoryImpl(apiService);
+  final userRepository = UserRepositoryImpl(apiService);
+  final tokenRepository = TokenRepositoryImpl(userLocalSource);
 
   final repositoryProviders = [
     Provider<ApiService>.value(value: apiService),
     Provider<MovieRepository>.value(value: movieRepository),
     Provider<UserRepository>.value(value: userRepository),
+    Provider<TokenRepository>.value(value: tokenRepository),
   ];
 
   runApp(MultiProvider(
@@ -44,7 +48,10 @@ class MyApp extends StatelessWidget {
       TutorialPage.routeName: (context) => TutorialPage(),
       LoginPage.routeName: (context) {
         return Provider(
-          create: (context) => LoginBloc(context.read<UserRepository>()),
+          create: (context) => LoginBloc(
+            context.read<UserRepository>(),
+            context.read<TokenRepository>(),
+          ),
           child: LoginPage(),
         );
       },

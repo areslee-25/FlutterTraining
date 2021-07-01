@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/ui/home/main_page.dart';
+import 'package:untitled/ui/login/login_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
@@ -236,7 +236,7 @@ class _TutorialPageState extends BaseState<TutorialPage> {
 
   void _nextPage(BuildContext context) {
     if (_isLastPage) {
-      NavigateUtils.pushNamedToRoot(context, MainPage.routeName);
+      NavigateUtils.pushNamedToRoot(context, LoginPage.routeName);
       return;
     }
     _pageController.animateToPage(_currentPage + 1,
