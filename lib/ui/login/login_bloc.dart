@@ -3,6 +3,7 @@ import 'package:rxdart/subjects.dart';
 import 'package:tuple/tuple.dart';
 import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/source/remote/remote.dart';
+import 'package:untitled/data/source/remote/repository/token_repository.dart';
 import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
 class LoginBloc extends BaseBloc {
@@ -27,7 +28,8 @@ class LoginBloc extends BaseBloc {
     required this.loading,
   }) : super(disposeBag);
 
-  factory LoginBloc(UserRepository userRepository) {
+  factory LoginBloc(
+      UserRepository userRepository, TokenRepository tokenRepository) {
     final userNameController = PublishSubject<String>();
     final passwordController = PublishSubject<String>();
 
@@ -74,26 +76,21 @@ class LoginBloc extends BaseBloc {
           final userName = value.item2.item1;
           final password = value.item2.item2;
           return Rx.fromCallable(
-            () => userRepository.loginUser(userName, password, token),
-          );
+              () => userRepository.loginUser(userName, password, token));
         })
-        .flatMap(
-          (token) => Rx.fromCallable(
-            () => userRepository.getInfoUser(token.token),
-          ),
-        )
+        .flatMap((token) =>
+            Rx.fromCallable(() => userRepository.getInfoUser(token.token))
+                .doOnDone(() => tokenRepository.saveToken(token)))
         .map((user) => user.name.isNotEmpty);
 
     loginStream.listen((data) {
       print("Login Success");
-      print(data);
       loadingController.add(false);
     }, onDone: () {
       print("Login Done");
     }, onError: (error) {
       print("Login Error");
       if (error is AppError) {
-        print(error.message);
         loadingController.add(false);
       }
     });
@@ -101,13 +98,14 @@ class LoginBloc extends BaseBloc {
     final streams = [isValidStream];
 
     return LoginBloc._(
-        disposeBag: DisposeBag([...controllers, ...streams]),
-        userNameChanged: userNameController.add,
-        passwordChanged: passwordController.add,
-        login: loginController.add,
-        register: registerController.add,
-        isValidate: isValidStream,
-        loading: loadingController,
-        loginSuccess: loginStream);
+      disposeBag: DisposeBag([...controllers, ...streams]),
+      userNameChanged: userNameController.add,
+      passwordChanged: passwordController.add,
+      login: loginController.add,
+      register: registerController.add,
+      isValidate: isValidStream,
+      loading: loadingController,
+      loginSuccess: loginStream,
+    );
   }
 }

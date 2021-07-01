@@ -15,9 +15,8 @@ abstract class UserRepository {
 
 class UserRepositoryImpl extends BaseRepository implements UserRepository {
   final ApiService _apiService;
-  final UserLocalSource _userLocalSource;
 
-  UserRepositoryImpl(this._apiService, this._userLocalSource);
+  UserRepositoryImpl(this._apiService);
 
   @override
   Future<Token> createToken() async {

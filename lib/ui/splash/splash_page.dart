@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/ui/login/login_page.dart';
+import 'package:untitled/data/source/remote/repository/token_repository.dart';
+import 'package:untitled/ui/home/main_page.dart';
+import 'package:untitled/ui/tutorial/tutorial_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
@@ -16,9 +18,15 @@ class SplashPage extends BaseStateFul {
 
 class _SplashPageState extends BaseState<SplashPage> {
   @override
-  void init() {
-    final routes = context.read<Map<String, WidgetBuilder>>();
-    print(routes);
+  Future<void> init() async {
+    final tokenRepository = context.read<TokenRepository>();
+    final token = await tokenRepository.getToken();
+    final routeName =
+        token == null ? TutorialPage.routeName : MainPage.routeName;
+
+    Future.delayed(Duration(seconds: 2), () {
+      NavigateUtils.pushNamedToRoot(context, routeName);
+    });
   }
 
   @override
@@ -53,9 +61,7 @@ class _SplashPageState extends BaseState<SplashPage> {
                 Padding(padding: const EdgeInsets.only(top: 4)),
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.black),
-                  onPressed: () {
-                    NavigateUtils.pushNamed(context, LoginPage.routeName);
-                  },
+                  onPressed: () {},
                   child: Text(
                     'Flutter Training'.toUpperCase(),
                     style: TextStyle(
