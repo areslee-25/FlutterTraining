@@ -29,6 +29,9 @@ class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
         hideLoading();
         NavigateUtils.pushNamedToRoot(context, MainPage.routeName);
       }
+    }, onError: (e, s) {
+      hideLoading();
+      handleError(e);
     }).disposeBy(bloc.disposeBag);
   }
 

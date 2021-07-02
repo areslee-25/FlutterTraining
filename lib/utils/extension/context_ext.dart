@@ -27,7 +27,7 @@ extension BuildContextExtension on BuildContext {
       builder: (context) {
         return const Material(
           type: MaterialType.transparency,
-          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          child: Center(child: CircularProgressIndicator()),
         );
       },
     );

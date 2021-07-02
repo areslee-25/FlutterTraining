@@ -60,7 +60,7 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
   @override
   void dispose() {
     print('--------------------------------');
-    print('Dispose $T');
+    print('Start Dispose $T');
     _bloc.dispose();
     super.dispose();
   }
@@ -72,7 +72,7 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
 
   void handleError(Object error) {
     if (error is AppError) {
-      showDialog(error.message, () {});
+      showDialog(error.message, () => popWidget());
     } else {
       showSnackBar(error.toString());
     }
@@ -88,10 +88,12 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
 
   void showLoading() => context.showLoading();
 
-  void hideLoading() => NavigateUtils.pop(context, rootNavigator: true);
+  void hideLoading() => popWidget();
 
   void showSnackBar(String message) => context.showSnackBar(message);
 
   void showDialog(String message, VoidCallback action) =>
       context.showAlertDialog(message, action);
+
+  void popWidget() => NavigateUtils.pop(context, rootNavigator: true);
 }
