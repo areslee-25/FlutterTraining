@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/data/source/remote/repository/movie_repository.dart';
+import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/movie/movie_bloc.dart';
 import 'package:untitled/ui/home/nav_scaffold.dart';

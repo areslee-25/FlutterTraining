@@ -1,8 +1,7 @@
-import 'package:untitled/environment.dart';
-
 import 'application.dart';
+import 'environment.dart';
 
 Future<void> main() async {
-  Environment.flavor = Flavor.product;
+  Environment.flavor = Flavor.stg;
   await Application.run();
 }

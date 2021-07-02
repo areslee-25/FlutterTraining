@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/data/source/remote/repository/token_repository.dart';
+import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/ui/home/main_page.dart';
 import 'package:untitled/ui/tutorial/tutorial_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';

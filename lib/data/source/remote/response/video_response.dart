@@ -1,6 +1,6 @@
 import 'package:untitled/data/model/video.dart';
 
-import '../remote.dart';
+import '../../remote.dart';
 
 class VideoResponse {
   final Video video;

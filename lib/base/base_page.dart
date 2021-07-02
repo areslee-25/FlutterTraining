@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/base/base_bloc.dart';
+import 'package:untitled/data/source/remote/api/error/app_error.dart';
+import 'package:untitled/utils/disposeBag/dispose_bag.dart';
+import 'package:untitled/utils/navigate_utils.dart';
+import 'package:untitled/utils/utils.dart';
 
 abstract class BaseStateLess extends StatelessWidget {
   const BaseStateLess({Key? key}) : super(key: key);
@@ -35,6 +39,8 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
 
   B get bloc => _bloc;
 
+  DisposeBag get disposeBag => bloc.disposeBag;
+
   Widget builder(BuildContext context);
 
   @override
@@ -42,7 +48,12 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
     super.initState();
     print('--------------------------------');
     print('initState $T, $B');
+
     _bloc = context.read<B>();
+    _bloc
+      ..errorStream.listen(handleError).disposeBy(disposeBag)
+      ..loadingStream.listen(handleLoading).disposeBy(disposeBag);
+
     init();
   }
 
@@ -58,4 +69,29 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
   Widget build(BuildContext context) {
     return builder(context);
   }
+
+  void handleError(Object error) {
+    if (error is AppError) {
+      showDialog(error.message, () {});
+    } else {
+      showSnackBar(error.toString());
+    }
+  }
+
+  void handleLoading(bool isLoading) {
+    if (isLoading) {
+      showLoading();
+    } else {
+      hideLoading();
+    }
+  }
+
+  void showLoading() => context.showLoading();
+
+  void hideLoading() => NavigateUtils.pop(context, rootNavigator: true);
+
+  void showSnackBar(String message) => context.showSnackBar(message);
+
+  void showDialog(String message, VoidCallback action) =>
+      context.showAlertDialog(message, action);
 }

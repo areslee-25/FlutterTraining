@@ -1,5 +1,5 @@
 import 'package:untitled/data/model/base_model.dart';
-import 'package:untitled/data/source/remote/remote.dart';
+import 'package:untitled/data/source/remote.dart';
 
 class Movie extends BaseModel {
   final int id;

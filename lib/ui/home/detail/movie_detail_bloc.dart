@@ -2,7 +2,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/model/video.dart';
-import 'package:untitled/data/source/remote/repository/movie_repository.dart';
+import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
 class MovieDetailBloc extends BaseBloc {

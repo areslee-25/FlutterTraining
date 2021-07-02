@@ -1,6 +1,6 @@
 import 'package:untitled/data/model/base_model.dart';
 
-import '../remote.dart';
+import '../../remote.dart';
 
 class MovieResponse {
   final List<Movie> list;

@@ -1,4 +1,4 @@
-import '../remote.dart';
+import '../../remote.dart';
 
 class ErrorResponse {
   final int statusCode;
