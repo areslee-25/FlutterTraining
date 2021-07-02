@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 
-import '../../remote.dart';
+import '../../../remote.dart';
 
 abstract class AppClient extends BaseClient {
   Future<dynamic> getItem(Uri url) {

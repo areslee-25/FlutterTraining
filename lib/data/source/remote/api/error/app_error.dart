@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import '../../remote.dart';
+import '../../../remote.dart';
 
 class AppError {
   final int statusCode;

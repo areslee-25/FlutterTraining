@@ -1,5 +1,5 @@
 import 'package:untitled/data/model/base_model.dart';
-import 'package:untitled/data/source/local/local.dart';
+import 'package:untitled/data/source/local.dart';
 import 'package:untitled/data/source/local/sharedPrefs/shared_prefs_api.dart';
 import 'package:untitled/data/source/local/sharedPrefs/shared_prefs_key.dart';
 

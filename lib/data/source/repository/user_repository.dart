@@ -1,8 +1,7 @@
 import 'package:untitled/data/model/base_model.dart';
-import 'package:untitled/data/source/local/local.dart';
-import 'package:untitled/data/source/remote/api/core/key_params.dart';
 
 import '../remote.dart';
+import 'base_repository.dart';
 
 abstract class UserRepository {
   Future<Token> createToken();
@@ -21,7 +20,7 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
   @override
   Future<Token> createToken() async {
     final url = createUri(KeyPrams.v3_authentication_token);
-    return safeApiCall<dynamic, Token>(
+    return safeApiCall<Token>(
         call: _apiService.getItem(url),
         mapper: (response) => Token.fromJson(response));
   }
@@ -30,7 +29,7 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
   Future<Token> loginUser(
       String userName, String password, String requestToken) async {
     final url = createUri(KeyPrams.v3_authentication_login);
-    return safeApiCall<dynamic, Token>(
+    return safeApiCall<Token>(
         call: _apiService.postItem(url: url, body: {
           KeyPrams.user_name: '$userName',
           KeyPrams.password: '$password',
@@ -50,7 +49,7 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
 
     final url =
         createUri(KeyPrams.v3_account, {KeyPrams.session_id: '$session'});
-    return safeApiCall<dynamic, User>(
+    return safeApiCall<User>(
         call: _apiService.getItem(url),
         mapper: (response) => User.fromJson(response));
   }

@@ -2,27 +2,27 @@ import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:tuple/tuple.dart';
 import 'package:untitled/base/base_bloc.dart';
-import 'package:untitled/data/source/remote/remote.dart';
-import 'package:untitled/data/source/remote/repository/token_repository.dart';
+import 'package:untitled/data/source/remote.dart';
+import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
 class LoginBloc extends BaseBloc {
   Function(String) userNameChanged;
   Function(String) passwordChanged;
 
-  Function(void) login;
-  Function(void) register;
+  Sink<void> login;
+  Sink<void> register;
 
   Stream<bool> isValidate;
   Stream<bool> loading;
-  Stream<bool> loginSuccess;
+  Stream<bool> loginStream;
 
   LoginBloc._({
     required DisposeBag disposeBag,
     required this.userNameChanged,
     required this.passwordChanged,
     required this.login,
-    required this.loginSuccess,
+    required this.loginStream,
     required this.register,
     required this.isValidate,
     required this.loading,
@@ -101,11 +101,11 @@ class LoginBloc extends BaseBloc {
       disposeBag: DisposeBag([...controllers, ...streams]),
       userNameChanged: userNameController.add,
       passwordChanged: passwordController.add,
-      login: loginController.add,
-      register: registerController.add,
+      login: loginController.sink,
+      register: registerController.sink,
       isValidate: isValidStream,
       loading: loadingController,
-      loginSuccess: loginStream,
+      loginStream: loginStream,
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:untitled/data/model/base_model.dart';
-import 'package:untitled/data/source/local/local.dart';
+import 'package:untitled/data/source/local.dart';
 
 abstract class TokenRepository {
   Future<Token?> getToken();

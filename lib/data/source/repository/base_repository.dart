@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:http/io_client.dart';
-import 'package:untitled/utils/env.dart';
+import 'package:untitled/environment.dart';
 
 import '../remote.dart';
 
-typedef ResponseToModelMapper<Response, Model> = Model Function(
-    Response response);
+typedef ResponseToModelMapper<Response, T> = T Function(Response response);
 
 abstract class BaseRepository {
   Uri createUri(String path, [Map<String, String>? queryParameters]) {
@@ -22,8 +20,10 @@ abstract class BaseRepository {
     return Uri.https(baseUrl, path, query);
   }
 
-  Future<Model> safeApiCall<Response, Model>({required Future<Response> call,
-    required ResponseToModelMapper<Response, Model> mapper}) async {
+  Future<T> safeApiCall<T>({
+    required Future<dynamic> call,
+    required ResponseToModelMapper<dynamic, T> mapper,
+  }) async {
     try {
       final response = await call;
       if (response != null) {

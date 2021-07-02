@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/ui/home/main_page.dart';
 import 'package:untitled/ui/login/login_bloc.dart';
+import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 import 'package:untitled/utils/resource/color_app.dart';
@@ -23,12 +24,12 @@ class LoginPage extends BaseStateFul {
 class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
   @override
   void init() {
-    final disposable = bloc.loginSuccess.listen((isSuccess) {
+    bloc.loginStream.listen((isSuccess) {
       if (isSuccess) {
+        hideLoading();
         NavigateUtils.pushNamedToRoot(context, MainPage.routeName);
       }
-    });
-    bloc.addDispose(disposable);
+    }).disposeBy(bloc.disposeBag);
   }
 
   @override
@@ -40,7 +41,6 @@ class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
           _buildTopImage(context),
           _buildBottomImage(context),
           _buildContent(context),
-          _buildLoading(),
         ],
       ),
     );
@@ -80,23 +80,6 @@ class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
           child: Image.asset(ImageApp.bottom_login, fit: BoxFit.fill),
         ),
       ),
-    );
-  }
-
-  Widget _buildLoading() {
-    return StreamBuilder(
-      stream: bloc.loading,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        }
-        final bool isLoading = snapshot.data as bool;
-        print("isLoading : $isLoading");
-        if (!isLoading) {
-          return const SizedBox();
-        }
-        return Center(child: CircularProgressIndicator());
-      },
     );
   }
 
@@ -147,7 +130,10 @@ class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
       context,
       StringApp.login,
       [ColorApp.color_93_57_186, ColorApp.color_150_107_222],
-      bloc.login,
+      () {
+        showLoading();
+        bloc.login.add(null);
+      },
     );
   }
 
@@ -156,12 +142,14 @@ class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
       context,
       StringApp.sing_up,
       [ColorApp.color_171_95_208, ColorApp.color_213_152_234],
-      bloc.register,
+      () {
+        bloc.register.add(null);
+      },
     );
   }
 
   Widget _buildButton(BuildContext context, String text, List<Color> colors,
-      Function(void) onPressed) {
+      VoidCallback onPressed) {
     final height = 42 * 375 / getScreenWidth(context);
     final borderRadius = BorderRadius.circular(height / 2);
 
@@ -180,7 +168,7 @@ class _LoginPageState extends BaseBlocState<LoginPage, LoginBloc> {
               ),
             ),
             child: TextButton(
-              onPressed: () => onPressed(() {}),
+              onPressed: onPressed,
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(borderRadius: borderRadius),

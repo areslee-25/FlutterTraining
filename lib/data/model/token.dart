@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:untitled/data/source/remote/remote.dart';
+import 'package:untitled/data/source/remote.dart';
 
 import 'base_model.dart';
 

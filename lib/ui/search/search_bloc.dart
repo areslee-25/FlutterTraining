@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:untitled/base/base_bloc.dart';
-import 'package:untitled/data/source/remote/repository/movie_repository.dart';
+import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
 import 'search_sate.dart';

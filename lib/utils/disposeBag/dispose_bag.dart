@@ -127,6 +127,18 @@ class DisposeBag implements DisposeBagBase {
       disposable.forEach(_guardType);
 }
 
+extension DisposableStreamSubscription on StreamSubscription {
+  void disposeBy(DisposeBag disposeBag) {
+    disposeBag.add(this);
+  }
+}
+
+extension DisposableStreamController on StreamController {
+  void disposeBy(DisposeBag disposeBag) {
+    disposeBag.add(this);
+  }
+}
+
 extension IterableNullableExtension<T extends Object> on Iterable<T?> {
   Iterable<T> whereNotNull() sync* {
     for (var element in this) {
