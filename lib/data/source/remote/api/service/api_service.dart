@@ -1,7 +1,7 @@
-
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:untitled/data/source/remote.dart';
 
 import 'app_client.dart';
 
@@ -35,11 +35,13 @@ class ApiService extends AppClient {
     print('Time Request: $timeRequest ms');
     print('Status Code ${response.statusCode}, ${response.request}');
 
-    if (response.statusCode == HttpStatus.unauthorized) {
-      // TODO Refresh Token
-      print('Unauthorized');
+    final int statusCode = response.statusCode;
+    switch (statusCode) {
+      case HttpStatus.unauthorized:
+        break;
+      case HttpStatus.notFound:
+        throw AppError.network(statusCode);
     }
-
     return response;
   }
 }

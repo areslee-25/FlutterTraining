@@ -16,40 +16,40 @@ class AppError {
 
   factory AppError.toError(dynamic body, int statusCode) {
     AppError appError;
-    switch (statusCode) {
-      case HttpStatus.unauthorized:
-        appError = AppError.toUnauthorized();
-        break;
-      case HttpStatus.networkConnectTimeoutError:
-      case HttpStatus.gatewayTimeout:
-      case HttpStatus.requestTimeout:
-        appError = AppError.network(statusCode);
-        break;
-      case HttpStatus.notFound:
-        appError = AppError(
-          statusCode: statusCode,
-          message: 'HttpStatus NotFound',
-          type: AppErrorType.network,
-        );
-        break;
-      default:
-        try {
-          appError = ErrorResponse.fromJson(body).toSeverError();
-        } catch (exception) {
+    try {
+      appError = ErrorResponse.fromJson(body).toSeverError();
+    } catch (exception) {
+      switch (statusCode) {
+        case HttpStatus.unauthorized:
+          appError = AppError.toUnauthorized();
+          break;
+        case HttpStatus.networkConnectTimeoutError:
+        case HttpStatus.gatewayTimeout:
+        case HttpStatus.requestTimeout:
+          appError = AppError.network(statusCode);
+          break;
+        case HttpStatus.notFound:
+          appError = AppError(
+            statusCode: statusCode,
+            message: 'HttpStatus NotFound',
+            type: AppErrorType.network,
+          );
+          break;
+        default:
           if (exception is TimeoutException || exception is IOException) {
             appError = AppError.network(statusCode, exception);
           } else {
             appError = AppError.toUnknown(statusCode, exception);
           }
-        }
-        break;
+          break;
+      }
     }
     return appError;
   }
 
   factory AppError.network(int statusCode, [Object? exception]) => AppError(
         statusCode: statusCode,
-        message: statusCode.getHttpErrorMessage() + ", exception : $exception",
+        message: statusCode.getHttpErrorMessage(),
         type: AppErrorType.network,
       );
 

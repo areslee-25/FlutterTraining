@@ -14,7 +14,6 @@ class LoginBloc extends BaseBloc {
   Sink<void> register;
 
   Stream<bool> isValidate;
-  Stream<bool> loading;
   Stream<bool> loginStream;
 
   LoginBloc._({
@@ -25,7 +24,6 @@ class LoginBloc extends BaseBloc {
     required this.loginStream,
     required this.register,
     required this.isValidate,
-    required this.loading,
   }) : super(disposeBag);
 
   factory LoginBloc(
@@ -36,14 +34,11 @@ class LoginBloc extends BaseBloc {
     final loginController = PublishSubject<void>();
     final registerController = PublishSubject<void>();
 
-    final loadingController = BehaviorSubject<bool>.seeded(false);
-
     final controllers = [
       userNameController,
       passwordController,
       loginController,
       registerController,
-      loadingController,
     ];
 
     final isValidStream = Rx.combineLatest2(
@@ -63,9 +58,7 @@ class LoginBloc extends BaseBloc {
     final loginStream = loginController.stream
         .withLatestFrom(isValidStream, (_, bool isValidate) => isValidate)
         .where((isValidate) => isValidate)
-        .flatMap((_) => Rx.fromCallable(() => userRepository.createToken())
-            .doOnListen(() => loadingController.add(true))
-            .doOnError((e, s) => loadingController.add(false)))
+        .flatMap((_) => Rx.fromCallable(() => userRepository.createToken()))
         .map((token) => token.token)
         .withLatestFrom(
           loginInfoStream,
@@ -83,18 +76,6 @@ class LoginBloc extends BaseBloc {
                 .doOnDone(() => tokenRepository.saveToken(token)))
         .map((user) => user.name.isNotEmpty);
 
-    loginStream.listen((data) {
-      print("Login Success");
-      loadingController.add(false);
-    }, onDone: () {
-      print("Login Done");
-    }, onError: (error) {
-      print("Login Error");
-      if (error is AppError) {
-        loadingController.add(false);
-      }
-    });
-
     final streams = [isValidStream];
 
     return LoginBloc._(
@@ -104,7 +85,6 @@ class LoginBloc extends BaseBloc {
       login: loginController.sink,
       register: registerController.sink,
       isValidate: isValidStream,
-      loading: loadingController,
       loginStream: loginStream,
     );
   }
