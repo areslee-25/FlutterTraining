@@ -28,7 +28,7 @@ class Application {
     final userLocalSource = UserLocalSourceImpl(sharePrefsApi);
 
     final movieRepository = MovieRepositoryImpl(apiService);
-    final userRepository = UserRepositoryImpl(apiService);
+    final userRepository = UserRepositoryImpl(apiService, userLocalSource);
     final tokenRepository = TokenRepositoryImpl(userLocalSource);
 
     final repositoryProviders = [

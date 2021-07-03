@@ -25,4 +25,6 @@ class ImageApp {
   static const String top_login = img_path + 'top_login.png';
   static const String center_login = img_path + 'center_login.png';
   static const String bottom_login = img_path + 'bottom_login.png';
+
+  static const String bg_profile = img_path + 'bg_profile.png';
 }

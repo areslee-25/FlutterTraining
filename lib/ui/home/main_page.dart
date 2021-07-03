@@ -5,6 +5,8 @@ import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/movie/movie_bloc.dart';
 import 'package:untitled/ui/home/nav_scaffold.dart';
+import 'package:untitled/ui/home/profile/profile_bloc.dart';
+import 'package:untitled/ui/home/profile/profile_page.dart';
 import 'package:untitled/ui/home/tv/tv_bloc.dart';
 import 'package:untitled/ui/home/tv/tv_page.dart';
 import 'package:untitled/utils/resource/string_app.dart';
@@ -39,6 +41,18 @@ class _MainPageState extends BaseBlocState<MainPage, MainBloc> {
     },
   };
 
+  static final profileRoutes = <String, NavigationWidgetBuilder>{
+    Navigator.defaultRouteName: (context, setting) {
+      return Provider(
+        create: (context) => ProfileBloc(
+          context.read<UserRepository>(),
+          context.read<TokenRepository>(),
+        ),
+        child: ProfilePage(),
+      );
+    },
+  };
+
   @override
   void init() {}
 
@@ -54,10 +68,15 @@ class _MainPageState extends BaseBlocState<MainPage, MainBloc> {
           icon: Icon(Icons.tv),
           label: StringApp.tv,
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.pages_sharp),
+          label: StringApp.profile,
+        ),
       ],
       navBuilders: [
         (context, settings) => movieRoutes[settings.name]!(context, settings),
         (context, settings) => tvRoutes[settings.name]!(context, settings),
+        (context, settings) => profileRoutes[settings.name]!(context, settings),
       ],
     );
   }

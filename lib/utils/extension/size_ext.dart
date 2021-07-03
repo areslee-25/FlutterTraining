@@ -13,3 +13,4 @@ double getPaddingTop(BuildContext context) => getPadding(context).top;
 double getPaddingBottom(BuildContext context) => getPadding(context).bottom;
 
 double getRatio(BuildContext context) => 375.0 / getScreenWidth(context);
+
