@@ -1,5 +1,6 @@
 import 'package:untitled/data/model/base_model.dart';
 
+import '../local.dart';
 import '../remote.dart';
 import 'base_repository.dart';
 
@@ -10,12 +11,17 @@ abstract class UserRepository {
       String userName, String password, String requestToken);
 
   Future<User> getInfoUser(String requestToken);
+
+  Future<User?> getUserLocal();
+
+  Future<void> saveUserLocal(User user);
 }
 
 class UserRepositoryImpl extends BaseRepository implements UserRepository {
   final ApiService _apiService;
+  final UserLocalSource _localSource;
 
-  UserRepositoryImpl(this._apiService);
+  UserRepositoryImpl(this._apiService, this._localSource);
 
   @override
   Future<Token> createToken() async {
@@ -53,4 +59,10 @@ class UserRepositoryImpl extends BaseRepository implements UserRepository {
         call: _apiService.getItem(url),
         mapper: (response) => User.fromJson(response));
   }
+
+  @override
+  Future<User?> getUserLocal() => _localSource.getUser();
+
+  @override
+  Future<void> saveUserLocal(User user) => _localSource.saveUser(user);
 }

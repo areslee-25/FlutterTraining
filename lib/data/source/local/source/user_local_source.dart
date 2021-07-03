@@ -7,6 +7,10 @@ abstract class UserLocalSource {
   Future<Token?> getToken();
 
   Future<void> saveToken(Token token);
+
+  Future<User?> getUser();
+
+  Future<void> saveUser(User user);
 }
 
 class UserLocalSourceImpl implements UserLocalSource {
@@ -23,12 +27,32 @@ class UserLocalSourceImpl implements UserLocalSource {
   Future<Token?> getToken() async {
     try {
       final stringJson =
-          await _sharedPrefs.get<String>(SharedPrefsKey.key_token);
+      await _sharedPrefs.get<String>(SharedPrefsKey.key_token);
       if (stringJson == null) {
         return null;
       }
       return Token.fromStringJson(stringJson);
     } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> saveUser(User user) async {
+    _sharedPrefs.set<String>(SharedPrefsKey.key_user, user.toStringJson());
+  }
+
+  @override
+  Future<User?> getUser() async {
+    try {
+      final stringJson = await _sharedPrefs.get<String>(
+          SharedPrefsKey.key_user);
+      if (stringJson == null) {
+        return null;
+      }
+      return User.fromStringJson(stringJson);
+    } catch (e) {
+      print(e);
       return null;
     }
   }

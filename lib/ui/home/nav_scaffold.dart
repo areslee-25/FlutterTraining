@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/ui/search/search_page.dart';
-import 'package:untitled/utils/navigate_utils.dart';
 import 'package:untitled/utils/resource/color_app.dart';
 import 'package:untitled/utils/resource/image_app.dart';
 import 'package:untitled/utils/resource/string_app.dart';
@@ -60,16 +58,7 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: SafeArea(
-          top: true,
-          bottom: true,
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(child: _buildBody()),
-            ],
-          ),
-        ),
+        body: _buildBody(),
         bottomNavigationBar: _buildBottomNav(),
       ),
     );
@@ -90,8 +79,6 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
       ],
     );
   }
-
-  Widget _buildHeader() => HeaderApp(currentIndex);
 
   Widget _buildBottomNav() {
     return BottomNavigationBar(
@@ -129,9 +116,10 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
 }
 
 class HeaderApp extends BaseStateLess {
-  const HeaderApp(this.currentIndex) : super();
+  const HeaderApp(this.currentIndex, this.onTap) : super();
 
   final int currentIndex;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +129,7 @@ class HeaderApp extends BaseStateLess {
       width: double.infinity,
       child: Row(
         children: [
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Expanded(
             child: Text(
               _getTitleHeader(),
@@ -156,16 +144,14 @@ class HeaderApp extends BaseStateLess {
             width: height,
             child: InkWell(
               customBorder: const CircleBorder(),
-              onTap: () {
-                NavigateUtils.pushNamed(context, SearchPage.routeName);
-              },
+              onTap: onTap,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Image.asset(ImageApp.ic_search, fit: BoxFit.cover),
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
         ],
       ),
     );
@@ -175,6 +161,9 @@ class HeaderApp extends BaseStateLess {
     if (currentIndex == 0) {
       return StringApp.movies;
     }
-    return StringApp.tv;
+    if (currentIndex == 1) {
+      return StringApp.tv;
+    }
+    return StringApp.profile;
   }
 }

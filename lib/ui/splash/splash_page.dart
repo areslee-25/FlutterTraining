@@ -19,10 +19,13 @@ class SplashPage extends BaseStateFul {
 class _SplashPageState extends BaseState<SplashPage> {
   @override
   Future<void> init() async {
-    final tokenRepository = context.read<TokenRepository>();
-    final token = await tokenRepository.getToken();
+    final UserRepository userRepository = context.read<UserRepository>();
+    final user = await userRepository.getUserLocal();
+    print("_SplashPageState");
+    print(user);
+
     final routeName =
-        token == null ? TutorialPage.routeName : MainPage.routeName;
+    user == null ? TutorialPage.routeName : MainPage.routeName;
 
     Future.delayed(Duration(seconds: 2), () {
       NavigateUtils.pushNamedToRoot(context, routeName);

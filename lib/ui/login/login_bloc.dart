@@ -2,7 +2,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:tuple/tuple.dart';
 import 'package:untitled/base/base_bloc.dart';
-import 'package:untitled/data/source/remote.dart';
 import 'package:untitled/data/source/repository.dart';
 import 'package:untitled/utils/disposeBag/dispose_bag.dart';
 
@@ -73,7 +72,8 @@ class LoginBloc extends BaseBloc {
         })
         .flatMap((token) =>
             Rx.fromCallable(() => userRepository.getInfoUser(token.token))
-                .doOnDone(() => tokenRepository.saveToken(token)))
+                .doOnDone(() => tokenRepository.saveToken(token))
+                .doOnData((user) => userRepository.saveUserLocal(user)))
         .map((user) => user.name.isNotEmpty);
 
     final streams = [isValidStream];
