@@ -35,9 +35,9 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
     extends State<T> {
   void init();
 
-  late B _bloc;
+  late B? _bloc;
 
-  B get bloc => _bloc;
+  B get bloc => _bloc!;
 
   DisposeBag get disposeBag => bloc.disposeBag;
 
@@ -46,22 +46,26 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
   @override
   void initState() {
     super.initState();
-    print('--------------------------------');
-    print('initState $T, $B');
+    print('-------------------------------->');
+    print('InitState $T, $B');
 
-    _bloc = context.read<B>();
-    _bloc
-      ..errorStream.listen(handleError).disposeBy(disposeBag)
-      ..loadingStream.listen(handleLoading).disposeBy(disposeBag);
+    final B? providerB = context.read<B>();
+    if (providerB != null) {
+      _bloc = providerB;
+      _bloc!
+        ..errorStream.listen(handleError).disposeBy(disposeBag)
+        ..loadingStream.listen(handleLoading).disposeBy(disposeBag);
+    }
 
     init();
   }
 
   @override
   void dispose() {
-    print('--------------------------------');
-    print('Start Dispose $T');
-    _bloc.dispose();
+    print('<--------------------------------');
+    print('Destroy: Dispose $T');
+    _bloc?.dispose();
+    _bloc = null;
     super.dispose();
   }
 

@@ -27,4 +27,7 @@ class ImageApp {
   static const String bottom_login = img_path + 'bottom_login.png';
 
   static const String bg_profile = img_path + 'bg_profile.png';
+
+  String toPng(String name) => 'assets/images/$name.png';
+
 }

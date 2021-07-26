@@ -5,7 +5,9 @@ import 'shared_prefs_api.dart';
 class SharedPrefsImpl implements SharedPrefsApi {
   SharedPreferences? _prefs;
 
-  SharedPrefsImpl._();
+  SharedPrefsImpl._() {
+    _wrapPrefs();
+  }
 
   factory SharedPrefsImpl() => SharedPrefsImpl._();
 

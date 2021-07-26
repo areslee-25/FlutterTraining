@@ -31,12 +31,17 @@ class AppError {
         case HttpStatus.notFound:
           appError = AppError(
             statusCode: statusCode,
-            message: 'HttpStatus NotFound',
+            message: 'Https NotFound',
             type: AppErrorType.network,
           );
           break;
         default:
-          if (exception is TimeoutException || exception is IOException) {
+          if (exception is SocketException) {
+            // No Network
+          }
+          if (exception is TimeoutException ||
+              exception is IOException ||
+              exception is HttpException) {
             appError = AppError.network(statusCode, exception);
           } else {
             appError = AppError.toUnknown(statusCode, exception);
