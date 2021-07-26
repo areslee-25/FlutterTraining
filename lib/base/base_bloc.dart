@@ -30,12 +30,8 @@ abstract class BaseBloc {
   }
 
   void dispose() {
-    if (!_errorSubject.isClosed) {
-      _errorSubject.close();
-    }
-    if (!_loadingSubject.isClosed) {
-      _loadingSubject.close();
-    }
+    _errorSubject.close();
+    _loadingSubject.close();
     _disposeBag.clear();
   }
 
